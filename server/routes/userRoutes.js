@@ -1,14 +1,12 @@
 import express from "express";
-import { createUser, findUserByIdentifier } from "../MongoActions/userActions.js";
+import {
+  createUser,
+  findUserByIdentifier,
+} from "../MongoActions/userActions.js";
 import bcrypt from "bcrypt";
-import jwt from 'jsonwebtoken';
-
+import jwt from "jsonwebtoken";
 
 const router = express.Router();
-
-router.get("/", (req, res) => {
-  res.send("Hey Baby I am Your Boy");
-});
 
 const hasher = {
   hashPassword: async (password) => {
@@ -24,33 +22,45 @@ const hasher = {
   },
 };
 
-
 router.post("/signup", async (req, res) => {
-  const { email, username, password } = req.body;
+  const { email, username, password, designation } = req.body;
   const hash = await hasher.hashPassword(password);
   const user = createUser({
     email,
     username,
+    designation,
     password: hash,
   });
   res.send(user);
 });
 
 router.post("/login", async (req, res) => {
-    const { email , username } = req.body;
-    const identifier = email || username;
-    const user =await findUserByIdentifier(identifier);
-    console.log(user)
-    res.send(user);
-  });
-
-
-router.patch("/", (req, res) => {
-  res.send("Hey Baby How are you I am Your Girl");
-});
-
-router.delete("/", (req, res) => {
-  res.send("Hey Baby How are you I am Your Girl");
+  const { email, username, password } = req.body;
+  const identifier = email || username;
+  const user = await findUserByIdentifier(identifier);
+  const authorized = await hasher.checkHash(user.password, password);
+  if (authorized) {
+    const token = jwt.sign(
+      {
+        data: {
+          username: user.username,
+          email: user.email,
+          designation: user.designation,
+        },
+      },
+      "ThisIsPrivateKeyAndYouCantCopyIt",
+      { expiresIn: "7d" }
+    );
+    const userObj = {
+      email,
+      username: user.username,
+      designation: user.designation,
+      token,
+    };
+    res.send(userObj);
+  }
+  console.log(user);
+  res.send("Not Authorized");
 });
 
 export default router;

@@ -1,23 +1,21 @@
 import Project from "../model/projectModel.js";
 
 export const findProjectById = async (projectId) => {
-  const project = await Project.findById(projectId);
-  return project;
+  return await Project.findById(projectId);
 };
 
-export const getAllProjects = async (filterObj) => {
-  const projects = await Project.find(filterObj);
+export const getAllProjects = async () => {
+  return await Project.find({});
 };
 
 export const createProject = async (projectObj) => {
-  const status = await Project.create(projectObj);
-  return status;
+  return await Project.create(projectObj);
 };
 
 export const deleteProject = async (projectId) => {
-  const status = await Project.findOneAndDelete();
-  return status;
+  return await Project.findByIdAndDelete(projectId);
 };
-export const updateProject = async (proejctId) => {
-  const status = await Project.findOneAndUpdate();
+
+export const updateProject = async (projectId, updateObj) => {
+  return await Project.findByIdAndUpdate(projectId, updateObj, { new: true });
 };

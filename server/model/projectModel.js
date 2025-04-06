@@ -13,10 +13,12 @@ const projectSchema = new mongoose.Schema({
   priority: {
     type: String,
     required: true,
-    enum: ["High", "Medium", "Low", "None"], // Optional: restrict values
+    enum: ["High", "Medium", "Low", "None"],
   },
   tasks: [taskSchema],
-});
+},{timestamps:true});
 
 const Project = mongoose.model("Project", projectSchema);
+
+
 module.exports = Project;

@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import projectRoutes from './routes/projectRoutes.js'
 import userRoutes from './routes/userRoutes.js'
 import mongoose from "mongoose";
+import { checkToken } from "./helper/tokenhelper.js";
 
 const app = express();
 const PORT = 9000;
@@ -23,13 +24,12 @@ db.once("open", () => {
 });
 
 
-
 app.get("/", (req, res) => {
   res.send("Welcome to the API");
 });
 
 app.use("/user", userRoutes);
-app.use("/project", projectRoutes);
+app.use("/project",checkToken,projectRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
