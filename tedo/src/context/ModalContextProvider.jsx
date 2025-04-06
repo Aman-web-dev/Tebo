@@ -14,8 +14,8 @@ export const  ModalProvider=({children})=> {
     }
 
     const closeModal=()=>{
-        setMode(idle);
         setmodalOpen(false);
+        setMode(idle);
     }
 
     const editProject=()=>{

@@ -21,7 +21,7 @@ function Projects() {
       <ProjectCard createProject={createProject}/>
       <ProjectCard createProject={createProject}/>
       <ProjectCard createProject={createProject}/>
-      {modalOpen ? <ProjectForm closeModal={closeModal}/> : ""}
+      {modalOpen?<ProjectForm />:""}
     </div>
   );
 }
