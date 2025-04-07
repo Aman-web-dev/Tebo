@@ -42,16 +42,13 @@ router.post("/login", async (req, res) => {
   if (authorized) {
     const token = jwt.sign(
       {
-        data: {
-          username: user.username,
-          email: user.email,
-          designation: user.designation,
-        },
+        data:user,
       },
       "ThisIsPrivateKeyAndYouCantCopyIt",
       { expiresIn: "7d" }
     );
     const userObj = {
+      id:user._id,
       email:user.email,
       username: user.username,
       designation: user.designation,

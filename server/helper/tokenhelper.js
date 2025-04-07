@@ -12,7 +12,7 @@ export const checkToken = (req, res, next) => {
       if (err) {
         return res.status(401).json({ message: "Invalid or expired token" });
       }
-      req.user = decoded.data; // optional: attach payload to request
+      req.user = decoded.data; 
       next();
     });
   } else {

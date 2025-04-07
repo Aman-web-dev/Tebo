@@ -5,7 +5,8 @@ import userRoutes from './routes/userRoutes.js'
 import mongoose from "mongoose";
 import { checkToken } from "./helper/tokenhelper.js";
 import cors from "cors";
-
+import commentRoutes from './routes/CommentRoutes.js'
+import TaskRoute from './routes/TaskRoute.js'
 
 const app = express();
 const PORT = process.env.PORT || 9000;
@@ -42,6 +43,8 @@ app.get("/", (req, res) => {
 
 app.use("/user", userRoutes);
 app.use("/project",checkToken,projectRoutes);
+app.use("/tasks",checkToken,TaskRoute);
+app.use('/comments',checkToken,commentRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

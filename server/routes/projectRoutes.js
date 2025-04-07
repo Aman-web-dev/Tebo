@@ -22,13 +22,12 @@ router.get("/:id",async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const { name, description, priority, createdBy, tasks } = req.body;
+  const { name, description, priority, createdBy} = req.body;
   const result = await createProject({
     name,
     description,
     priority,
     createdBy,
-    tasks,
   });
   res.send(result);
 });
