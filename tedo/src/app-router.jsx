@@ -1,16 +1,15 @@
 // AppRoutes.js
-import { Routes, Route } from 'react-router-dom';
-import ProtectedRoute from './components/protected-route';
-import ProtectedLayout from './Layouts/protected-layout';
+import { Routes, Route } from "react-router-dom";
+import ProtectedRoute from "./components/protected-route";
+import ProtectedLayout from "./Layouts/protected-layout";
 
-import Projects from './pages/projects'
-import PublicLayout from './Layouts/public-layout';
-import Auth from './pages/auth';
+import Projects from "./pages/projects";
+import PublicLayout from "./Layouts/public-layout";
+import Auth from "./pages/auth";
 
 const AppRoutes = () => {
   return (
     <Routes>
-
       {/* Public Routes with PublicLayout */}
       <Route element={<PublicLayout />}>
         <Route path="/login" element={<Auth />} />
@@ -23,7 +22,7 @@ const AppRoutes = () => {
           path="/dashboard"
           element={
             <ProtectedRoute>
-              <Projects/>
+              <Projects />
             </ProtectedRoute>
           }
         />
