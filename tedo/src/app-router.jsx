@@ -1,11 +1,11 @@
 // AppRoutes.js
 import { Routes, Route } from 'react-router-dom';
-import ProtectedRoute from './components/ProtectedRoute';
-import ProtectedLayout from './Layouts/ProtectedLayout';
+import ProtectedRoute from './components/protected-route';
+import ProtectedLayout from './Layouts/protected-layout';
 
-import Projects from './pages/Projects';
-import PublicLayout from './Layouts/PublicLayout';
-import Auth from './pages/Auth';
+import Projects from './pages/projects';
+import PublicLayout from './Layouts/public-layout';
+import Auth from './pages/auth';
 
 const AppRoutes = () => {
   return (

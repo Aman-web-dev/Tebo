@@ -1,9 +1,9 @@
 import { BrowserRouter as Router } from "react-router";
-import { AuthProvider } from "./context/AuthContextProvider";
-import AppRoutes from "./AppRouter";
+import { AuthProvider } from "./context/auth-context-provider";
+import AppRoutes from "./app-router";
 import "./index.css";
-import { ModalProvider } from "./context/ModalContextProvider";
-import Projects from "./pages/Projects";
+import { ModalProvider } from "./context/modal-context-provider";
+import Projects from "./pages/projects";
 
 function App() {
   return (
