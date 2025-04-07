@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 
-import ModalContext from './contextCreator/ModalContext';
+import ModalContext from './context/modal';
 
 
 export const  ModalProvider=({children})=> {
