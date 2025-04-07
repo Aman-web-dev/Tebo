@@ -52,15 +52,15 @@ router.post("/login", async (req, res) => {
       { expiresIn: "7d" }
     );
     const userObj = {
-      email,
+      email:user.email,
       username: user.username,
       designation: user.designation,
       token,
     };
     res.send(userObj);
+  }else{
+    res.send("wrong Pass");
   }
-  console.log(user);
-  res.send("Not Authorized");
 });
 
 export default router;

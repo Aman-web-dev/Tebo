@@ -4,12 +4,12 @@ import AuthContext from "./contextCreator/authContext";
 
 
 export  const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState({
     username: "",
     email: "",
     designation: "",
-    userId: "",
+    token:""
   });
 
   const login = (userObj) => {
@@ -17,7 +17,7 @@ export  const AuthProvider = ({ children }) => {
       user: userObj.username,
       email: userObj.email,
       designation: userObj.designation,
-      userId: userObj.userId,
+      token:userObj.token
     });
     setIsAuthenticated(true);
   };

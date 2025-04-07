@@ -13,7 +13,6 @@ function App() {
           <Router>
           <AppRoutes/>
           </Router>
-          <h1>Helo</h1>
         </ModalProvider>
       </AuthProvider>
     </>
