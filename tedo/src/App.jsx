@@ -3,7 +3,7 @@ import { AuthProvider } from "./context/auth-context-provider";
 import AppRoutes from "./app-router";
 import "./index.css";
 import { ModalProvider } from "./context/modal-context-provider";
-import Projects from "./pages/projects";
+
 
 function App() {
   return (
