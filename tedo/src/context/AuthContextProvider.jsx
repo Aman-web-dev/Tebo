@@ -14,7 +14,7 @@ export  const AuthProvider = ({ children }) => {
 
   const login = (userObj) => {
     setUser({
-      user: userObj.username,
+      username: userObj.username,
       email: userObj.email,
       designation: userObj.designation,
       token:userObj.token

@@ -17,5 +17,5 @@ export const deleteProject = async (projectId) => {
 };
 
 export const updateProject = async (projectId, updateObj) => {
-  return await Project.findByIdAndUpdate(projectId, updateObj, { new: true });
+  return await Project.findByIdAndUpdate(projectId, updateObj);
 };

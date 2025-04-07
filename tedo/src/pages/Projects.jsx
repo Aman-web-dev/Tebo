@@ -1,33 +1,57 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import ProjectCard from "../components/ProjectCard";
 import ProjectForm from "../components/projectForm";
 import { useModal } from "../hooks/useModal";
-import.meta.env;
+import { useAuth } from "../hooks/useAuth";
+import TaskList from "../components/taskList";
+
+const SERVER_URL = import.meta.env.VITE_SERVER_URL || "http://localhost:9000";
 
 function Projects() {
-  const { modalOpen, mode, createProject, closeModal, editProject } =
-    useModal();
+  const { user } = useAuth();
+  const [editableProj, setEditableProj] = useState();
+  const { modalOpen, createProject, editProject } = useModal();
+  const [projects, setProjects] = useState([]);
 
-    useEffect(()=>{
-      const apiUrl = import.meta.env.VITE_API_URL;
-      console.log(apiUrl)
-    })
+  const editProjectToggle = (project) => {
+    setEditableProj(project);
+    editProject();
+  };
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const res = await axios.get(`${SERVER_URL}/project`, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        });
+        setProjects(res.data);
+      } catch (err) {
+        console.error("Error fetching projects", err);
+      }
+    };
+
+    fetchProjects();
+  }, [modalOpen]);
 
   return (
     <div className="grid grid-cols-4 gap-4">
-      <ProjectCard createProject={createProject}/>
-      <ProjectCard createProject={createProject}/>
-      <ProjectCard createProject={createProject}/>
-      <ProjectCard createProject={createProject}/>
-      <ProjectCard createProject={createProject}/>
-      <ProjectCard createProject={createProject}/>
-      <ProjectCard createProject={createProject}/>
-      <ProjectCard createProject={createProject}/>
-      <ProjectCard createProject={createProject}/>
-      <ProjectCard createProject={createProject}/>
-      <ProjectCard createProject={createProject}/>
-      <ProjectCard createProject={createProject}/>
-      {modalOpen?<ProjectForm />:""}
+      {projects.map((project) => (
+        <ProjectCard
+          key={project._id}
+          project={project}
+          createProject={createProject}
+          editProject={editProjectToggle}
+        />
+      ))}
+      {modalOpen && user.designation == "Admin" ? (
+        <ProjectForm project={editableProj} />
+      ) : (
+        ""
+      )}
+      {user.designation == "User" && modalOpen == true ? <TaskList /> : ""}
     </div>
   );
 }
