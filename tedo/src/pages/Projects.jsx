@@ -4,7 +4,7 @@ import ProjectCard from "../components/ProjectCard";
 import ProjectForm from "../components/projectForm";
 import { useModal } from "../hooks/useModal";
 import { useAuth } from "../hooks/useAuth";
-import TaskList from "../components/taskList";
+import TaskList from "../components/tasklist";
 
 const SERVER_URL = import.meta.env.VITE_SERVER_URL || "http://localhost:9000";
 
