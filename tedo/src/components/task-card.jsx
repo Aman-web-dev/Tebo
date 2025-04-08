@@ -15,7 +15,7 @@ import axios from 'axios';
 
 const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 
-function TaskCard({ task, handleStatusChange, handleAddComment }) {
+function TaskCard({ task, handleStatusChange, handleAddComment,getAllTaks }) {
   const { user } = useAuth();
   const { openComment, editTask } = useModal();
   const [toggleOpen, setToggleOpen] = useState(false);
@@ -84,11 +84,7 @@ function TaskCard({ task, handleStatusChange, handleAddComment }) {
         }
       );
 
-      setTasks((prevTasks) =>
-        prevTasks.map((t) =>
-          t._id === task._id ? { ...task, status: newStatus } : task
-        )
-      );
+      getAllTaks()
     } catch (err) {
       console.error("Failed to update task status:", err);
     }

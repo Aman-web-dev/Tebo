@@ -4,7 +4,6 @@ import ProjectCard from "../components/project-card";
 import ProjectForm from "../components/project-form";
 import { useModal } from "../hooks/useModal";
 import { useAuth } from "../hooks/useAuth";
-import TaskList from "../components/task-list";
 import TaskForm from "../components/task-form";
 import { Navigate } from "react-router";
 
@@ -15,8 +14,7 @@ function Projects() {
   const { modalOpen, mode, product } = useModal();
   const [projects, setProjects] = useState([]);
 
-  useEffect(() => {
-    const fetchProjects = async () => {
+   const fetchProjects = async () => {
       try {
         const res = await axios.get(`${SERVER_URL}/project`, {
           headers: {
@@ -29,6 +27,7 @@ function Projects() {
       }
     };
 
+  useEffect(() => {
     fetchProjects();
   }, [modalOpen]);
 

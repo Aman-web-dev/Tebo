@@ -90,6 +90,7 @@ function Tasks() {
               task={task}
               handleStatusChange={handleStatusChange}
               handleAddComment={handleAddComment}
+              getAlltasks={getAllTasks}
             />
           ) : !showMine ? (
             <TaskCard
@@ -97,6 +98,7 @@ function Tasks() {
               task={task}
               handleStatusChange={handleStatusChange}
               handleAddComment={handleAddComment}
+              getAlltasks={getAllTasks}
             />
           ) : null
         )}

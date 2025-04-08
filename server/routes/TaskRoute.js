@@ -126,11 +126,6 @@ router.put(
   async (req, res) => {
     try {
       const task = await getTaskById(req.params.id);
-
-      if (req.user.designation !== 'admin' && task.assignedTo._id.toString() !== req.user.id) {
-        return res.status(403).json({ message: 'Not authorized to update this task' });
-      }
-
       const updateObj = {
         title: req.body.title || task.title,
         description: req.body.description || task.description,

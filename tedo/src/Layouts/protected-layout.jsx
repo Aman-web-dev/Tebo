@@ -1,11 +1,9 @@
 import React from "react";
-import { Route, Outlet } from "react-router-dom";
+import {Outlet } from "react-router-dom";
 import Navbar from "../components/navbar";
-import { useModal } from "../hooks/useModal";
+
 
 function ProtectedLayout() {
-
-
   return (
     <div>
       <main>

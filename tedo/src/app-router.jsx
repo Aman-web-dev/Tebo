@@ -2,7 +2,6 @@
 import { Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./components/protected-route";
 import ProtectedLayout from "./Layouts/protected-layout";
-
 import Projects from "./pages/projects";
 import PublicLayout from "./Layouts/public-layout";
 import Auth from "./pages/auth";
