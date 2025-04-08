@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { useAuth } from "../hooks/useAuth";
 
 const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated,user } = useAuth();
   useEffect(() => {console.log(isAuthenticated)});
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;

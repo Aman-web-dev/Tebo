@@ -1,7 +1,7 @@
 import User from '../model/userModel.js'
 
 export const findAllUser = async () => {
-  const users = await User.find();
+  const users = await User.find({designation:"User"});
   return users;
 };
 

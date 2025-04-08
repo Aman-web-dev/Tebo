@@ -5,15 +5,11 @@ import axios from "axios";
 import { Navigate } from "react-router";
 import { useNavigate } from "react-router";
 
-const SERVER_URL = import.meta.env.VITE_SERVER_URL || "http://localhost:9000";
+const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 
 function Auth() {
   const { isAuthenticated, login } = useAuth();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    console.log(isAuthenticated);
-  });
 
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [isLogin, setIsLogin] = useState(true); // toggle between login and signup
@@ -26,7 +22,7 @@ function Auth() {
     e.preventDefault();
     const route = isLogin ? "/login" : "/signup";
     console.log("Trying to Signup", formData);
-
+    console.log(route);
     try {
       const res = await axios.post(`${SERVER_URL}/user${route}`, formData);
       const userData = res.data;
@@ -39,6 +35,10 @@ function Auth() {
       alert("Error");
     }
   };
+
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" replace />;
+  }
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
@@ -94,22 +94,24 @@ function Auth() {
                     placeholder="elonmusk256"
                     required=""
                   />
-                  <label
-                    for="countries"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Select Designantion
-                  </label>
-                  <select
-                    onChange={handleChange}
-                    name="designation"
-                    id="designation"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  >
-                    <option selected>Choose Project Priority</option>
-                    <option value="Admin">Admin</option>
-                    <option value="User">User</option>
-                  </select>
+                  <div className="mt-4">
+                    <label
+                      for="countries"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Select Designantion
+                    </label>
+                    <select
+                      onChange={handleChange}
+                      name="designation"
+                      id="designation"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    >
+                      <option selected>Choose Project Priority</option>
+                      <option value="Admin">Admin</option>
+                      <option value="User">User</option>
+                    </select>
+                  </div>
                 </div>
               ) : (
                 ""

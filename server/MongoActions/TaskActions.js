@@ -36,6 +36,7 @@ export const getTaskById = async (id) => {
     return task;
   } catch (error) {
     console.error('Error fetching task by ID:', error);
+    console.log(error)
     throw error;
   }
 };

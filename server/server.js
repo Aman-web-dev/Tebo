@@ -7,9 +7,12 @@ import { checkToken } from "./helper/tokenhelper.js";
 import cors from "cors";
 import commentRoutes from './routes/CommentRoutes.js'
 import TaskRoute from './routes/TaskRoute.js'
+import dotenv from 'dotenv'
 
+dotenv.config()
 const app = express();
 const PORT = process.env.PORT || 9000;
+
 
 app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
@@ -18,15 +21,13 @@ app.use(cors());
 
 app.use(
   cors({
-    origin: "*", // your frontend URL
+    origin: process.env.FRONTEND_URL || "*", // your frontend URL
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true,
   })
 );
 
-
-
-mongoose.connect("mongodb+srv://Aman:amanisbest@neina.nn9uj.mongodb.net/tebo?retryWrites=true&w=majority&appName=Neina", {
+mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -35,7 +36,6 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 db.once("open", () => {
   console.log("Connected to MongoDB");
 });
-
 
 app.get("/", (req, res) => {
   res.send("Welcome to the API");

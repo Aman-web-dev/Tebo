@@ -86,7 +86,7 @@ export async function getCommentsByProject(projectId) {
 
 export async function getCommentsByTask(taskId) {
   try {
-    const comments = await Comment.find({ task: taskId })
+    const comments = await Comment.find({ task:taskId })
       .populate("user", "username email")
       .populate("task", "title project")
       .sort({ createdAt: -1 });

@@ -1,7 +1,7 @@
 import express from 'express';
 const router = express.Router();
 import { getTaskById } from '../MongoActions/TaskActions.js';
-import { createComment } from '../MongoActions/CommentActions.js';
+import { createComment,getAllComments,getCommentById,getCommentsByProject,getCommentsByTask,getCommentsByUser } from '../MongoActions/CommentActions.js';
 
 
 
@@ -15,11 +15,12 @@ router.get('/:id', async (req, res) => {
 });
 
 
-router.get('', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const comments = await getAllComments();
     res.json(comments);
   } catch (error) {
+    console.log(error)
     res.status(500).json({ message: 'Server error' });
   }
 });
@@ -89,6 +90,7 @@ router.get('/task/:taskId', async (req, res) => {
     const comments = await getCommentsByTask(req.params.taskId);
     res.json(comments);
   } catch (error) {
+    console.log(error)
     res.status(500).json({ message: 'Server error' });
   }
 });

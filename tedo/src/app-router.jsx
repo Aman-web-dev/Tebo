@@ -6,6 +6,7 @@ import ProtectedLayout from "./Layouts/protected-layout";
 import Projects from "./pages/projects";
 import PublicLayout from "./Layouts/public-layout";
 import Auth from "./pages/auth";
+import Tasks from "./pages/tasks";
 
 const AppRoutes = () => {
   return (
@@ -23,6 +24,14 @@ const AppRoutes = () => {
           element={
             <ProtectedRoute>
               <Projects />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/tasks"
+          element={
+            <ProtectedRoute>
+              <Tasks/>
             </ProtectedRoute>
           }
         />

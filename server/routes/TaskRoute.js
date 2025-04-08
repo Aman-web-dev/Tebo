@@ -11,40 +11,84 @@ import {
   filterAndSortTasks
 } from '../MongoActions/TaskActions.js'
 
-router.post(
-  '/',
-  async (req, res) => {
-    // Restrict to admin only
-    console.log(req.user);
-    if (req.user.designation !== 'Admin'&& !req.body.user_id) {
-      return res.status(403).json({ message: 'Only admins can create tasks' });
+
+
+
+router.post('/', async (req, res) => {
+  // Restrict to admin only if no user_id is provided
+  if (req.user.designation !== 'Admin' && !req.user._id) {
+    return res.status(403).json({ message: 'Only admins can create tasks' });
+  }
+  try {
+    const { taskList } = req.body;
+
+    if (!taskList || !Array.isArray(taskList)) {
+      return res.status(400).json({ message: 'taskList must be an array' });
     }
 
+    const createdTasks = [];
+    const updatedTasks = [];
 
-    try {
+    // Process each task in the taskList
+    for (const task of taskList) {
       const taskObj = {
-        title: req.body.title,
-        description: req.body.description || '',
-        project: req.body.project,
-        assignedTo: req.body.assignedTo,
-        status: req.body.status || 'pending',
-        priority: req.body.priority || 'medium',
-        createdBy: req.user._id 
+        title: task.title,
+        description: task.description || '',
+        project: task.project,
+        assignedTo: task.assignedTo,
+        status: task.status || 'pending',
+        priority: task.priority || 'medium',
+        createdBy: req.user._id,
       };
 
+      // If the task has an _id, check if it exists and needs updating
+      if (task._id) {
+        const existingTask = await getTaskById(task._id);
+
+        if (existingTask) {
+          // Check if the task has changed
+          const hasChanges =
+            existingTask.title !== taskObj.title ||
+            existingTask.description !== taskObj.description ||
+            existingTask.project.toString() !== taskObj.project ||
+            existingTask.assignedTo?.toString() !== taskObj.assignedTo ||
+            existingTask.status !== taskObj.status ||
+            existingTask.priority !== taskObj.priority;
+console.log(hasChanges)
+          if (hasChanges) {
+            // Update the existing task
+            const updatedTask = await updateTask(
+              task._id,
+              taskObj,
+            );
+            updatedTasks.push(updatedTask);
+          }
+          // If no changes, skip it (no action needed)
+          continue;
+        }
+      }
+
+      // If no _id or task doesn’t exist, create a new task
       const newTask = await createTask(taskObj);
-      res.status(201).json({ message: 'Task created successfully', task: newTask });
-    } catch (error) {
-      res.status(500).json({ message: 'Server error' });
+      createdTasks.push(newTask);
     }
+
+    res.status(201).json({
+      message: 'Tasks processed successfully',
+      createdTasks,
+      updatedTasks,
+    });
+  } catch (error) {
+    console.error('Error processing tasks:', error);
+    res.status(500).json({ message: 'Server error' });
   }
-);
+});
+
+
 
 router.get(
   '/:id',
   async (req, res) => {
- 
-
     try {
       const task = await getTaskById(req.params.id);
       res.json(task);
@@ -58,9 +102,9 @@ router.get(
 router.get(
   '/project/:projectId',
   async (req, res) => {
-
+    const projectId=req.params.projectId;
     try {
-      const tasks = await getTasksByProject(req.params.projectId);
+      const tasks = await getTasksByProject(projectId);
       res.json(tasks);
     } catch (error) {
       res.status(500).json({ message: 'Server error' });
