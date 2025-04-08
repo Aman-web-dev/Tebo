@@ -18,9 +18,10 @@ app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 app.use(express.json());
 
+const ALLOWED_ORIGIN=process.env.ALLOWED_ORIGIN || "http://localhost:5173"; 
 
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: ALLOWED_ORIGIN,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   credentials: true,
 }));
