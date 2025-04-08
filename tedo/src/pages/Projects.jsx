@@ -55,7 +55,6 @@ function Projects() {
         ""
       )}
 
-      {user.designation == "User" && modalOpen == true ? <TaskList /> : ""}
     </div>
   );
 }

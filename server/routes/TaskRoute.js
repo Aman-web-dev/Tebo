@@ -8,14 +8,14 @@ import {
   getTasksByProject,
   getTasksByUser,
   updateTask,
-  filterAndSortTasks
+  filterAndSortTasks,
+  getAllTask
 } from '../MongoActions/TaskActions.js'
 
 
 
 
 router.post('/', async (req, res) => {
-  // Restrict to admin only if no user_id is provided
   if (req.user.designation !== 'Admin' && !req.user._id) {
     return res.status(403).json({ message: 'Only admins can create tasks' });
   }
@@ -29,7 +29,6 @@ router.post('/', async (req, res) => {
     const createdTasks = [];
     const updatedTasks = [];
 
-    // Process each task in the taskList
     for (const task of taskList) {
       const taskObj = {
         title: task.title,
@@ -41,12 +40,10 @@ router.post('/', async (req, res) => {
         createdBy: req.user._id,
       };
 
-      // If the task has an _id, check if it exists and needs updating
       if (task._id) {
         const existingTask = await getTaskById(task._id);
 
         if (existingTask) {
-          // Check if the task has changed
           const hasChanges =
             existingTask.title !== taskObj.title ||
             existingTask.description !== taskObj.description ||
@@ -56,19 +53,16 @@ router.post('/', async (req, res) => {
             existingTask.priority !== taskObj.priority;
 console.log(hasChanges)
           if (hasChanges) {
-            // Update the existing task
             const updatedTask = await updateTask(
               task._id,
               taskObj,
             );
             updatedTasks.push(updatedTask);
           }
-          // If no changes, skip it (no action needed)
           continue;
         }
       }
 
-      // If no _id or task doesn’t exist, create a new task
       const newTask = await createTask(taskObj);
       createdTasks.push(newTask);
     }
@@ -130,12 +124,9 @@ router.get(
 router.put(
   '/:id',
   async (req, res) => {
-
-
     try {
       const task = await getTaskById(req.params.id);
-      
-      // Only admin or assigned user can update
+
       if (req.user.designation !== 'admin' && task.assignedTo._id.toString() !== req.user.id) {
         return res.status(403).json({ message: 'Not authorized to update this task' });
       }
@@ -173,7 +164,34 @@ router.delete(
   }
 );
 
-// POST /tasks/filter - Filter and sort tasks
+router.get("/", async (req, res) => {
+  try {
+    const tasks = await getAllTask()
+
+    if (!tasks || tasks.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "No tasks found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Tasks retrieved successfully",
+      tasks,
+    });
+  } catch (error) {
+    console.error("Error fetching tasks:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error while fetching tasks",
+      error: error.message,
+    });
+  }
+});
+
+
+
 router.post(
   '/filter',
   async (req, res) => {

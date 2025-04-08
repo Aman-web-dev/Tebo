@@ -1,12 +1,28 @@
 import React from "react";
 import { useState } from "react";
 import { useModal } from "../hooks/useModal";
-import { Clock, AlertTriangle, CheckCircle, RotateCw,Edit,MessageSquare } from "lucide-react";
+import { useAuth } from "../hooks/useAuth";
+import {
+  Clock,
+  AlertTriangle,
+  CheckCircle,
+  RotateCw,
+  Edit,
+  MessageSquare,
+} from "lucide-react";
+
+import axios from 'axios';
+
+const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 
 function TaskCard({ task, handleStatusChange, handleAddComment }) {
-  const {openComment,editTask}=useModal()
+  const { user } = useAuth();
+  const { openComment, editTask } = useModal();
   const [toggleOpen, setToggleOpen] = useState(false);
   const { priority, status, assignedTo } = task;
+
+  console.log(user.username != task.assignedTo.username);
+  console.log(user.username, task.assignedTo.username);
 
   const getPriorityColor = (priority) => {
     switch (priority) {
@@ -51,6 +67,33 @@ function TaskCard({ task, handleStatusChange, handleAddComment }) {
     });
   };
 
+  const changeTaskStatus = async (e) => {
+    const newStatus = e.target.value;
+
+    try {
+      if (!user || !user.token) throw new Error("User not authenticated");
+      console.log(user.token)
+
+      const response = await axios.put(
+        `${SERVER_URL}/tasks/${task._id}`,
+        { status: newStatus },
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+
+      setTasks((prevTasks) =>
+        prevTasks.map((t) =>
+          t._id === task._id ? { ...task, status: newStatus } : task
+        )
+      );
+    } catch (err) {
+      console.error("Failed to update task status:", err);
+    }
+  };
+
   return (
     <div
       key={task.id}
@@ -89,25 +132,39 @@ function TaskCard({ task, handleStatusChange, handleAddComment }) {
       </div>
 
       {/* Action Buttons */}
-      <div className="flex space-x-3 mb-3">
-        <button
-          onClick={() =>
-            setStatusEditTask(statusEditTask === task.id ? null : task.id)
-          }
-          className="flex items-center px-3 py-2 text-sm bg-blue-50 hover:bg-blue-100 text-blue-700 dark:bg-blue-900 dark:hover:bg-blue-800 dark:text-blue-200 rounded-md transition-colors"
-        >
-          <Edit className="w-4 h-4 mr-1" />
-          Edit Status
-        </button>
-        <button
-          onClick={() =>
-            openComment(task)
-          }
-          className="flex items-center px-3 py-2 text-sm bg-gray-50 hover:bg-gray-100 text-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-200 rounded-md transition-colors"
-        >
-          <MessageSquare className="w-4 h-4 mr-1" />
-          {/* Comments ({task.comments.length}) */}
-        </button>
+      <div className="flex space-x-3 justify-between ">
+        <div className="flex space-x-3 justify-between">
+          {user.username == task.assignedTo.username ? (
+            <form class="max-w-sm mx-auto">
+              <select
+                onChange={(e) => changeTaskStatus(e)}
+                id="countries"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              >
+                <option selected>Change Status</option>
+                <option value="pending">Pending</option>
+                <option value="in_progress">In Progress</option>
+                <option value="done">Done</option>
+              </select>
+            </form>
+          ) : (
+            ""
+          )}
+
+          <button
+            onClick={() => openComment(task)}
+            className="flex items-center px-3 py-2 text-sm bg-gray-50 hover:bg-gray-100 text-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-200 rounded-md transition-colors"
+          >
+            <MessageSquare className="w-4 h-4 mr-1" />
+            {/* Comments ({task.comments.length}) */}
+          </button>
+        </div>
+
+        <div className="flex flex-col justify-between items-center text-left  text-xs text-gray-500 dark:text-gray-400 mb-4">
+          <p className="text-left">Assigned By: @{task.createdBy.username}</p>
+
+          <p className="text-left">Assigned To: @{task.assignedTo.username}</p>
+        </div>
       </div>
     </div>
   );

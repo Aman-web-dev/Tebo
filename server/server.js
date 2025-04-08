@@ -17,15 +17,13 @@ const PORT = process.env.PORT || 9000;
 app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 app.use(express.json());
-app.use(cors());
 
-app.use(
-  cors({
-    origin: process.env.FRONTEND_URL || "*", // your frontend URL
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-    credentials: true,
-  })
-);
+
+app.use(cors({
+  origin: "http://localhost:5173",
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+  credentials: true,
+}));
 
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,

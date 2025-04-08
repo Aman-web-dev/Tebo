@@ -23,10 +23,10 @@ function CommentDialogue() {
   };
 
   const handleAddComment = async () => {
-    if (!comment.trim()) return; // Do nothing if comment is empty
+    if (!comment.trim()) return; 
   
     try {
-      // Get token from localStorage (assuming user is stored as JSON)
+      
       const user = JSON.parse(localStorage.getItem("user"));
       if (!user || !user.token) {
         throw new Error("User not authenticated");
@@ -35,7 +35,7 @@ function CommentDialogue() {
       const response = await axios.post(
         `${SERVER_URL}/comments/`,
         {
-          taskId:editableProduct._id.$oid,
+          taskId:editableProduct._id,
           content: comment.trim(),
         },
         {
@@ -45,14 +45,12 @@ function CommentDialogue() {
         }
       );
   
-      // Add the new comment from the server response to the state
+      
       const newComment = response.data.comment;
       setComments([...comments, newComment]);
       setComment(""); // Clear the input field
     } catch (error) {
       console.error("Error posting comment:", error);
-      // Handle error (e.g., show a toast notification)
-      alert(error.response?.data?.message || "Failed to post comment");
     }
   };
 
@@ -79,7 +77,7 @@ console.log(response.data.comments || response.data)
 
   useEffect(() => {
     console.log(editableProduct._id.$oid)
-    fetchCommentsByTaskId(editableProduct._id.$oid);
+    fetchCommentsByTaskId(editableProduct._id);
   }, []);
 
   return (
@@ -144,103 +142,5 @@ console.log(response.data.comments || response.data)
   );
 }
 
-const commentss = [
-  {
-    _id: {
-      $oid: "67f41045a440020879a8487c",
-    },
-    task: {
-      $oid: "67f40acaad37b51cb1def0b4",
-    },
-    user: {
-      $oid: "67f4033270ecacaf69b85794",
-    },
-    content: "what is This task I Don't wanna Do This",
-    createdAt: {
-      $date: "2025-04-07T17:49:57.209Z",
-    },
-    __v: 0,
-  },
-  {
-    _id: {
-      $oid: "67f41045a440020879a8487c",
-    },
-    task: {
-      $oid: "67f40acaad37b51cb1def0b4",
-    },
-    user: {
-      $oid: "67f4033270ecacaf69b85794",
-    },
-    content: "what is This task I Don't wanna Do This",
-    createdAt: {
-      $date: "2025-04-07T17:49:57.209Z",
-    },
-    __v: 0,
-  },
-  {
-    _id: {
-      $oid: "67f41045a440020879a8487c",
-    },
-    task: {
-      $oid: "67f40acaad37b51cb1def0b4",
-    },
-    user: {
-      $oid: "67f4033270ecacaf69b85794",
-    },
-    content: "what is This task I Don't wanna Do This",
-    createdAt: {
-      $date: "2025-04-07T17:49:57.209Z",
-    },
-    __v: 0,
-  },
-  {
-    _id: {
-      $oid: "67f41045a440020879a8487c",
-    },
-    task: {
-      $oid: "67f40acaad37b51cb1def0b4",
-    },
-    user: {
-      $oid: "67f4033270ecacaf69b85794",
-    },
-    content: "what is This task I Don't wanna Do This",
-    createdAt: {
-      $date: "2025-04-07T17:49:57.209Z",
-    },
-    __v: 0,
-  },
-  {
-    _id: {
-      $oid: "67f41045a440020879a8487c",
-    },
-    task: {
-      $oid: "67f40acaad37b51cb1def0b4",
-    },
-    user: {
-      $oid: "67f4033270ecacaf69b85794",
-    },
-    content: "what is This task I Don't wanna Do This",
-    createdAt: {
-      $date: "2025-04-07T17:49:57.209Z",
-    },
-    __v: 0,
-  },
-  {
-    _id: {
-      $oid: "67f41045a440020879a8487c",
-    },
-    task: {
-      $oid: "67f40acaad37b51cb1def0b4",
-    },
-    user: {
-      $oid: "67f4033270ecacaf69b85794",
-    },
-    content: "what is This task I Don't wanna Do This",
-    createdAt: {
-      $date: "2025-04-07T17:49:57.209Z",
-    },
-    __v: 0,
-  },
-];
 
 export default CommentDialogue;
