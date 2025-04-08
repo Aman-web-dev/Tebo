@@ -5,7 +5,7 @@ import axios from "axios";
 import { Navigate } from "react-router";
 import { useNavigate } from "react-router";
 
-const SERVER_URL = import.meta.env.VITE_SERVER_URL;
+const SERVER_URL = import.meta.env.VITE_SERVER_URL||"http://localhost:6000";
 
 function Auth() {
   const { isAuthenticated, login } = useAuth();

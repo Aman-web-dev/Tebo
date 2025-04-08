@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-const secretKey = "ThisIsPrivateKeyAndYouCantCopyIt"; // use same secret you used to sign
+const secretKey = process.env.SECRET_KEY; // use same secret you used to sign
 
 export const checkToken = (req, res, next) => {
   const header = req.headers["authorization"];
