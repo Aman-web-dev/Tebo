@@ -1,4 +1,4 @@
-import Comment from "../model/CommentModel.js";
+import Comment from "../model/commentModel.js";
 
 export async function createComment(commentObj) {
   const newComment = new Comment(commentObj);
